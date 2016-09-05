@@ -5,6 +5,8 @@
             [boot.git :as git]
             [degree9.boot-exec :as exec]
             [degree9.boot-semver :as semver]))
+;; Semgit Global Settings ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(def ^:dynamic *debug* true)
 
 ;; Semgit Helper Fn's ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn get-feature [& _]
@@ -19,7 +21,7 @@
         args  (cond-> ["add"]
                 (:force *opts*) (conj " --force")
                 path            (into path))]
-    (exec/exec :process "git" :arguments args :directory "." :debug true)))
+    (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
 (boot/deftask git-branch
   "List, create, or delete branches."
@@ -38,7 +40,7 @@
                  name             (conj name)
                  rename           (conj rename)
                  start            (conj start))]
-    (exec/exec :process "git" :arguments args :directory "." :debug true)))
+    (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
 (boot/deftask git-checkout
   "Switch git branches."
@@ -55,7 +57,7 @@
                  name            (conj name)
                  start           (conj start))]
                  (prn args)
-    (exec/exec :process "git" :arguments args :directory "." :debug true)))
+    (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
 (boot/deftask git-commit
   "Record changes to the repository."
@@ -65,7 +67,14 @@
         args    (cond-> ["commit"]
                   (:all *opts*) (conj " --all")
                   message       (conj " --message" message))]
-    (exec/exec :process "git" :arguments args :directory "." :debug true)))
+    (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
+
+(boot/deftask git-merge
+  "Join two or more git branches together."
+  []
+  (let [args    (cond-> ["merge"]
+                  )]
+    (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
 (boot/deftask git-mv
   "Move or rename a git file or directory."
@@ -78,7 +87,7 @@
                  (:force *opts*)  (conj " --force")
                  source           (conj source)
                  dest             (conj dest))]
-    (exec/exec :process "git" :arguments args :directory "." :debug true)))
+    (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
 (boot/deftask git-rm
   "Remove files from the working tree and from git index."
@@ -88,7 +97,7 @@
         args  (cond-> ["rm"]
                 (:force *opts*) (conj " --force")
                 path            (into path))]
-    (exec/exec :process "git" :arguments args :directory "." :debug true)))
+    (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
 (boot/deftask git-tag
   "Create, list, delete or verify a tag."
@@ -102,7 +111,7 @@
                   (:delete *opts*) (conj " --delete")
                   (:force *opts*)  (conj " --force")
                   message          (conj message))]
-    (exec/exec :process "git" :arguments args :directory "." :debug true)))
+    (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
 ;; Semgit Workflow Tasks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (boot/deftask feature
@@ -110,7 +119,7 @@
   [n name       NAME   str  "Feature name which will be appended to 'feature-'."
    c close             bool "Closes a feature branch using 'mode'."
    b branch     BRANCH str  "The base or target branch for this feature."
-   m mode       MODE   kw   "The mode which 'close' should opperate, ':merge' or ':rebase'."
+   ;m mode       MODE   kw   "The mode which 'close' should opperate, ':merge' or ':rebase'."
    r remove            bool "Removes a feature without closing it."]
   (assert (:name *opts*) "Feature branch 'name' was not provided.")
   (assert (if (:close *opts*) (:branch *opts*) true) "Target 'branch' was not provided.")
@@ -119,14 +128,19 @@
         target  (:branch *opts* "master")
         close?  (:close *opts*)
         open?   (not close?)
-        remove? (:remove *opts*)]
+        remove? (:remove *opts*)
+        ;mode    (:mode *opts* :merge)
+        ]
     (cond
       open?   (comp
                 (git-checkout :branch true :name bname :start target)
                 (semver/version :pre-release 'degree9.boot-semgit/get-feature)
                 (git-commit :all true :message (str "[open branch] " bname " from " target)))
       close?  (comp
-                (git-checkout :name target :start "version.properties"))
+                (git-checkout :name target :start "version.properties")
+                (git-commit :all true :message (str "[close branch] " bname))
+                (git-checkout :name target)
+                (git-merge :branch [bname] :message (str "[merge branch] " bname)))
       remove? nil
       )))
 
