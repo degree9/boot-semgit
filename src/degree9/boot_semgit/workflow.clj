@@ -10,15 +10,9 @@
   []
   (let [*out*' *out*
         *err*' *err*]
-    (comp
-      (binding [*out* (new java.io.StringWriter)
-                *err* (new java.io.StringWriter)]
-        (boot/with-pre-wrap fileset
-          fileset))
-      (binding [*out* *out*'
-                *err* *err*']
-        (boot/with-post-wrap fileset
-          fileset)))))
+    (binding [*out* (new java.io.StringWriter)
+              *err* (new java.io.StringWriter)]
+      (boot/with-pass-thru fileset))))
 
 ;; Semgit Workflow Tasks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (boot/deftask feature
@@ -43,8 +37,11 @@
         *out*'   *out*]
     (cond
       open?   (comp
+                (redirect-output)
                 (semgit/git-checkout :branch true :name fname :start target)
+                (redirect-output)
                 (semver/version :pre-release 'degree9.boot-semgit/get-feature)
+                (redirect-output)
                 (semgit/git-commit :all true :message openmsg))
       close?  (comp
                 (semgit/git-rebase :start target :checkout fname)
