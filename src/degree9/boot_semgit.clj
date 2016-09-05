@@ -119,7 +119,7 @@
         pre-release (fn [_] (:name *opts*))]
     (comp
       (git-checkout :branch true :name bname :start target)
-      (semver/version :pre-release 'get-feature)
+      (semver/version :pre-release 'degree9.boot-semgit/get-feature)
       (git-commit :all true :message (str "Open branch: " bname " from " target))
       ;;close
       ;;remove
