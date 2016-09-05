@@ -135,7 +135,7 @@
    c close             bool "Closes a feature branch using 'git-rebase' and 'git-merge'."
    b branch     BRANCH str  "The base or target branch for this feature."
    ;m mode       MODE   kw   "The mode which 'close' should opperate, ':merge' or ':rebase'."
-   r remove            bool "Removes a feature without closing it."]
+   d delete            bool "Delete/Remove a feature without closing it."]
   (assert (:name *opts*) "Feature 'name' was not provided.")
   (assert (if (:close *opts*) (:branch *opts*) true) "Target 'branch' was not provided.")
   (let [mode    (:mode *opts* :rebase)
@@ -143,8 +143,8 @@
         fname   (str "feature-" bname)
         target  (:branch *opts* "master")
         close?  (:close *opts*)
-        open?   (not close?)
-        remove? (:remove *opts*)
+        remove? (:delete *opts*)
+        open?   (and (not close?) (not remove?))
         ;mode    (:mode *opts* :merge)
         ]
     (cond
