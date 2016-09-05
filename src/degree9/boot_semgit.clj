@@ -158,7 +158,9 @@
                 (git-commit :all true :message (str "[close feature] " bname))
                 (git-checkout :name target)
                 (git-merge :branch [fname] :message (str "[merge feature] " bname " into " target)))
-      remove? nil
+      remove? (comp
+                (git-checkout :name target :force true)
+                (git-branch :name fname :delete true :force true))
       )))
 
 (boot/deftask patch
