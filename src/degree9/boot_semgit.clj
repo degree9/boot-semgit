@@ -19,7 +19,7 @@
         args  (cond-> ["add"]
                 (:force *opts*) (conj " --force")
                 path            (into path))]
-    (exec/exec :process "git" :arguments args :directory ".")))
+    (exec/exec :process "git" :arguments args :directory "." :debug true)))
 
 (boot/deftask git-branch
   "List, create, or delete branches."
@@ -38,7 +38,7 @@
                  name             (conj name)
                  rename           (conj rename)
                  start            (conj start))]
-    (exec/exec :process "git" :arguments args :directory ".")))
+    (exec/exec :process "git" :arguments args :directory "." :debug true)))
 
 (boot/deftask git-checkout
   "Switch git branches."
@@ -55,7 +55,7 @@
                  name            (conj name)
                  start           (conj start))]
                  (prn args)
-    (exec/exec :process "git" :arguments args :directory ".")))
+    (exec/exec :process "git" :arguments args :directory "." :debug true)))
 
 (boot/deftask git-commit
   "Record changes to the repository."
@@ -65,7 +65,7 @@
         args    (cond-> ["commit"]
                   (:all *opts*) (conj " --all")
                   message       (conj " --message" message))]
-    (exec/exec :process "git" :arguments args :directory ".")))
+    (exec/exec :process "git" :arguments args :directory "." :debug true)))
 
 (boot/deftask git-mv
   "Move or rename a git file or directory."
@@ -78,7 +78,7 @@
                  (:force *opts*)  (conj " --force")
                  source           (conj source)
                  dest             (conj dest))]
-    (exec/exec :process "git" :arguments args :directory ".")))
+    (exec/exec :process "git" :arguments args :directory "." :debug true)))
 
 (boot/deftask git-rm
   "Remove files from the working tree and from git index."
@@ -88,7 +88,7 @@
         args  (cond-> ["rm"]
                 (:force *opts*) (conj " --force")
                 path            (into path))]
-    (exec/exec :process "git" :arguments args :directory ".")))
+    (exec/exec :process "git" :arguments args :directory "." :debug true)))
 
 (boot/deftask git-tag
   "Create, list, delete or verify a tag."
@@ -102,7 +102,7 @@
                   (:delete *opts*) (conj " --delete")
                   (:force *opts*)  (conj " --force")
                   message          (conj message))]
-    (exec/exec :process "git" :arguments args :directory ".")))
+    (exec/exec :process "git" :arguments args :directory "." :debug true)))
 
 ;; Semgit Workflow Tasks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (boot/deftask feature
