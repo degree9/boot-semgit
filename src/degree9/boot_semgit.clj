@@ -76,7 +76,7 @@
   (let [branch  (:branch *opts*)
         message (:message *opts*)
         args    (cond-> ["merge"]
-                  message (conj " --message " message)
+                  message (conj " -m " message)
                   branch  (into branch))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
