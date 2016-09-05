@@ -66,14 +66,18 @@
   (let [message (:message *opts*)
         args    (cond-> ["commit"]
                   (:all *opts*) (conj " --all")
-                  message       (conj " --message" message))]
+                  message       (conj " --message " message))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
 (boot/deftask git-merge
   "Join two or more git branches together."
-  []
-  (let [args    (cond-> ["merge"]
-                  )]
+  [b branch  BRANCH  [str] "Branch(es) to merge into current branch."
+   m message MESSAGE str   "Optional merge message."]
+  (let [branch  (:branch *opts*)
+        message (:message *opts*)
+        args    (cond-> ["merge"]
+                  message (conj " --message " message)
+                  branch  (into branch))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
 (boot/deftask git-mv
@@ -87,6 +91,17 @@
                  (:force *opts*)  (conj " --force")
                  source           (conj source)
                  dest             (conj dest))]
+    (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
+
+(boot/deftask git-rebase
+  "Reapply commits on top of another branch."
+  [s start    START str "Starting point to reapply current branch commits."
+   c checkout CHECK str "Optional branch to checkout before rebase."]
+  (let [start (:start *opts* "master")
+        check (:checkout *opts*)
+        args    (cond-> ["rebase"]
+                  start (conj start)
+                  check (conj check))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
 (boot/deftask git-rm
@@ -117,7 +132,7 @@
 (boot/deftask feature
   "Manage project feature branches."
   [n name       NAME   str  "Feature name which will be appended to 'feature-'."
-   c close             bool "Closes a feature branch using 'mode'."
+   c close             bool "Closes a feature branch using 'git-rebase' and 'git-merge'."
    b branch     BRANCH str  "The base or target branch for this feature."
    ;m mode       MODE   kw   "The mode which 'close' should opperate, ':merge' or ':rebase'."
    r remove            bool "Removes a feature without closing it."]
@@ -138,7 +153,7 @@
                 (semver/version :pre-release 'degree9.boot-semgit/get-feature)
                 (git-commit :all true :message (str "[open feature] " bname " from " target)))
       close?  (comp
-                (git-rebase :branch target :name fname )
+                (git-rebase :start target :checkout fname)
                 (git-checkout :name target :start "version.properties")
                 (git-commit :all true :message (str "[close feature] " bname))
                 (git-checkout :name target)
