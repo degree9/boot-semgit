@@ -1,4 +1,8 @@
-(ns degree9.boot-semgit.workflow)
+(ns degree9.boot-semgit.workflow
+  (:require [clojure.string :as s]
+            [boot.core :as boot]
+            [degree9.boot-semver :as semver]
+            [degree9.boot-semgit :as semgit]))
 
 ;; Semgit Workflow Tasks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (boot/deftask feature
@@ -21,18 +25,18 @@
         merge    (str "[merge feature] " bname " into " target)]
     (cond
       open?   (comp
-                (git-checkout :branch true :name fname :start target)
+                (semgit/git-checkout :branch true :name fname :start target)
                 (semver/version :pre-release 'degree9.boot-semgit/get-feature)
-                (git-commit :all true :message openmsg))
+                (semgit/git-commit :all true :message openmsg))
       close?  (comp
-                (git-rebase :start target :checkout fname)
-                (git-checkout :name target :start "version.properties")
-                (git-commit :all true :message closemsg)
-                (git-checkout :name target)
-                (git-merge :branch [fname] :message mergemsg))
+                (semgit/git-rebase :start target :checkout fname)
+                (semgit/git-checkout :name target :start "version.properties")
+                (semgit/git-commit :all true :message closemsg)
+                (semgit/git-checkout :name target)
+                (semgit/git-merge :branch [fname] :message mergemsg))
       remove? (comp
-                (git-checkout :name target :force true)
-                (git-branch :name fname :delete true :force true)))))
+                (semgit/git-checkout :name target :force true)
+                (semgit/git-branch :name fname :delete true :force true)))))
 
 (boot/deftask patch
   "Manage project patch/hotfix branches."
