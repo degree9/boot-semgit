@@ -32,9 +32,7 @@
         open?    (not (or close? remove?))
         closemsg (str "[close feature] " bname)
         openmsg  (str "[open feature] " bname " from " target)
-        merge    (str "[merge feature] " bname " into " target)
-        *err*'   *err*
-        *out*'   *out*]
+        mergemsg (str "[merge feature] " bname " into " target)]
     (cond
       open?   (comp
                 (redirect-output)
