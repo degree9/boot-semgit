@@ -124,7 +124,8 @@
   (assert (:name *opts*) "Feature branch 'name' was not provided.")
   (assert (if (:close *opts*) (:branch *opts*) true) "Target 'branch' was not provided.")
   (let [mode    (:mode *opts* :rebase)
-        bname   (str "feature-" (:name *opts*))
+        bname   (:name *opts*)
+        fname   (str "feature-" bname)
         target  (:branch *opts* "master")
         close?  (:close *opts*)
         open?   (not close?)
@@ -133,14 +134,15 @@
         ]
     (cond
       open?   (comp
-                (git-checkout :branch true :name bname :start target)
+                (git-checkout :branch true :name fname :start target)
                 (semver/version :pre-release 'degree9.boot-semgit/get-feature)
-                (git-commit :all true :message (str "[open branch] " bname " from " target)))
+                (git-commit :all true :message (str "[open feature] " bname " from " target)))
       close?  (comp
+                (git-rebase :branch target :name fname )
                 (git-checkout :name target :start "version.properties")
-                (git-commit :all true :message (str "[close branch] " bname))
+                (git-commit :all true :message (str "[close feature] " bname))
                 (git-checkout :name target)
-                (git-merge :branch [bname] :message (str "[merge branch] " bname)))
+                (git-merge :branch [fname] :message (str "[merge feature] " bname " into " target)))
       remove? nil
       )))
 
