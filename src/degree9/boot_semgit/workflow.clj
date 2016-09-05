@@ -1,8 +1,24 @@
 (ns degree9.boot-semgit.workflow
   (:require [clojure.string :as s]
+            [clojure.java.io :as io]
             [boot.core :as boot]
             [degree9.boot-semver :as semver]
             [degree9.boot-semgit :as semgit]))
+
+(boot/deftask redirect-output
+  "Silence task output."
+  []
+  (let [*out*' *out*
+        *err*' *err*]
+    (comp
+      (binding [*out* (new java.io.StringWriter)
+                *err* (new java.io.StringWriter)]
+        (boot/with-pre-wrap fileset
+          fileset))
+      (binding [*out* *out*'
+                *err* *err*']
+        (boot/with-post-wrap fileset
+          fileset)))))
 
 ;; Semgit Workflow Tasks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (boot/deftask feature
@@ -22,7 +38,9 @@
         open?    (not (or close? remove?))
         closemsg (str "[close feature] " bname)
         openmsg  (str "[open feature] " bname " from " target)
-        merge    (str "[merge feature] " bname " into " target)]
+        merge    (str "[merge feature] " bname " into " target)
+        *err*'   *err*
+        *out*'   *out*]
     (cond
       open?   (comp
                 (semgit/git-checkout :branch true :name fname :start target)
