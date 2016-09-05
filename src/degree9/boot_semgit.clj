@@ -125,7 +125,8 @@
                 (git-checkout :branch true :name bname :start target)
                 (semver/version :pre-release 'degree9.boot-semgit/get-feature)
                 (git-commit :all true :message (str "[open branch] " bname " from " target)))
-      close?  nil
+      close?  (comp
+                (git-checkout :name target :start "version.properties"))
       remove? nil
       )))
 
