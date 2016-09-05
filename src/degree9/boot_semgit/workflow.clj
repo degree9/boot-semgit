@@ -5,16 +5,14 @@
             [degree9.boot-semver :as semver]
             [degree9.boot-semgit :as semgit]))
 
-(boot/deftask redirect-output
+(boot/deftask silence
   "Silence task output."
   []
-  (let [*out*' *out*
-        *err*' *err*]
-    (fn [next-handler]
-      (fn [fileset]
-        (binding [*out* (new java.io.StringWriter)
-                  *err* (new java.io.StringWriter)]
-           (next-handler fileset))))))
+  (fn [next-handler]
+    (fn [fileset]
+      (binding [*out* (new java.io.StringWriter)
+                *err* (new java.io.StringWriter)]
+        (next-handler fileset)))))
 
 ;; Semgit Workflow Tasks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (boot/deftask feature
