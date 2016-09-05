@@ -113,6 +113,7 @@
    m mode       MODE   kw   "The mode which 'close' should opperate, ':merge' or ':rebase'."
    r remove            bool "Removes a feature without closing it."]
   (assert (:name *opts*) "Feature branch 'name' was not provided.")
+  (assert (if (:close *opts*) (:branch *opts*) true) "Target 'branch' was not provided.")
   (let [mode    (:mode *opts* :rebase)
         bname   (str "feature-" (:name *opts*))
         target  (:branch *opts* "master")
