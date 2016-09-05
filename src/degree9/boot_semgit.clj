@@ -109,20 +109,23 @@
   "Manage project feature branches."
   [n name       NAME   str  "Feature name which will be appended to 'feature-'."
    c close             bool "Closes a feature branch using 'mode'."
-   b branch     BRANCH str  "The base branch and future target for this feature."
-   m mode       MODE   kw   "The mode which 'close' should opperate, default is ':rebase'."
+   b branch     BRANCH str  "The base or target branch for this feature."
+   m mode       MODE   kw   "The mode which 'close' should opperate, ':merge' or ':rebase'."
    r remove            bool "Removes a feature without closing it."]
   (assert (:name *opts*) "Feature branch 'name' was not provided.")
-  (let [mode (:mode *opts* :rebase)
-        bname (str "feature-" (:name *opts*))
-        target (:branch *opts* "master")
-        pre-release (fn [_] (:name *opts*))]
-    (comp
-      (git-checkout :branch true :name bname :start target)
-      (semver/version :pre-release 'degree9.boot-semgit/get-feature)
-      (git-commit :all true :message (str "Open branch: " bname " from " target))
-      ;;close
-      ;;remove
+  (let [mode    (:mode *opts* :rebase)
+        bname   (str "feature-" (:name *opts*))
+        target  (:branch *opts* "master")
+        close?  (:close *opts*)
+        open?   (not close?)
+        remove? (:remove *opts*)]
+    (cond
+      open?   (comp
+                (git-checkout :branch true :name bname :start target)
+                (semver/version :pre-release 'degree9.boot-semgit/get-feature)
+                (git-commit :all true :message (str "[open branch] " bname " from " target)))
+      close?  nil
+      remove? nil
       )))
 
 (boot/deftask patch
