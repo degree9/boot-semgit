@@ -69,10 +69,21 @@
                 (with-quiet
                   (semgit/git-commit :all true :message openmsg)))
       close?  (comp
+                (boot/with-pass-thru fs
+                  (util/info (str "Closing feature branch: " fname " \n"))
+                  (util/info (str "Cleaning branch history... \n")))
                 (semgit/git-rebase :start target :checkout fname)
+                (boot/with-pass-thru fs
+                  (util/info (str "Syncing version... \n")))
                 (semgit/git-checkout :name target :start "version.properties")
+                (boot/with-pass-thru fs
+                  (util/info (str "Saving changes... \n")))
                 (semgit/git-commit :all true :message closemsg)
+                (boot/with-pass-thru fs
+                  (util/info (str "Switching to target: " target " \n")))
                 (semgit/git-checkout :name target)
+                (boot/with-pass-thru fs
+                  (util/info (str "Merging feature: " fname "  \n")))
                 (semgit/git-merge :branch [fname] :message mergemsg))
       remove? (comp
                 (semgit/git-checkout :name target :force true)
