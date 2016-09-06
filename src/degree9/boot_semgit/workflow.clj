@@ -5,14 +5,34 @@
             [degree9.boot-semver :as semver]
             [degree9.boot-semgit :as semgit]))
 
+;; Semgit Workflow Helper Fn's ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(def orig-err (atom nil))
+(def orig-out (atom nil))
+
 (boot/deftask silence
   "Silence task output."
   []
   (fn [next-handler]
     (fn [fileset]
-      (binding [*out* (new java.io.StringWriter)
-                *err* (new java.io.StringWriter)]
+      (let [out *out*
+            err *err*]
+        (reset! orig-out out)
+        (reset! orig-err err)
+        (binding [*out* (new java.io.StringWriter)
+                  *err* (new java.io.StringWriter)]
+          (next-handler fileset))))))
+
+(boot/deftask unsilence
+  "Unsilence task output."
+  []
+  (fn [next-handler]
+    (fn [fileset]
+      (binding [*out* @orig-out
+                *err* @orig-err]
         (next-handler fileset)))))
+
+(defmacro with-quiet [task]
+  `(comp (silence) ~task (unsilence)))
 
 ;; Semgit Workflow Tasks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (boot/deftask feature
@@ -35,12 +55,16 @@
         mergemsg (str "[merge feature] " bname " into " target)]
     (cond
       open?   (comp
-                (redirect-output)
-                (semgit/git-checkout :branch true :name fname :start target)
-                ;(redirect-output)
-                (semver/version :pre-release 'degree9.boot-semgit/get-feature)
-                ;(redirect-output)
-                (semgit/git-commit :all true :message openmsg))
+                (util/info (str "Creating feature branch... \n"))
+                (with-quiet
+                  (semgit/git-checkout :branch true :name fname :start target))
+                (util/info (str "Updating version... \n"))
+                (with-quiet
+                  (semver/version :pre-release 'degree9.boot-semgit/get-feature))
+                (util/info (str "Saving changes... \n"))
+                (with-quiet
+                  (semgit/git-commit :all true :message openmsg))
+                (util/info (str "Feature branch created. \n")))
       close?  (comp
                 (semgit/git-rebase :start target :checkout fname)
                 (semgit/git-checkout :name target :start "version.properties")
