@@ -11,7 +11,7 @@
 (def orig-out (atom nil))
 
 (boot/deftask silence
-  "Silence task output."
+  "Silence future task output."
   []
   (fn [next-handler]
     (fn [fileset]
@@ -24,7 +24,7 @@
           (next-handler fileset))))))
 
 (boot/deftask unsilence
-  "Unsilence task output."
+  "Unsilence future task output."
   []
   (fn [next-handler]
     (fn [fileset]
@@ -56,13 +56,16 @@
         mergemsg (str "[merge feature] " bname " into " target)]
     (cond
       open?   (comp
-                (util/info (str "Creating feature branch: " fname " \n"))
+                (boot/with-pass-thru fs
+                  (util/info (str "Creating feature branch: " fname " \n")))
                 (with-quiet
                   (semgit/git-checkout :branch true :name fname :start target))
-                (util/info (str "Updating version... \n"))
+                (boot/with-pass-thru fs
+                  (util/info (str "Updating version... \n")))
                 (with-quiet
                   (semver/version :pre-release 'degree9.boot-semgit/get-feature))
-                (util/info (str "Saving changes... \n"))
+                (boot/with-pass-thru fs
+                  (util/info (str "Saving changes... \n")))
                 (with-quiet
                   (semgit/git-commit :all true :message openmsg)))
       close?  (comp
