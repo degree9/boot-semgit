@@ -100,6 +100,16 @@
                  dest             (conj dest))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
+(boot/deftask git-pull
+  "Fetch from and integrate with another repository or a local branch."
+  [b branch BRANCH str  "Branch to pull changes from (can be a remote branch ie. origin/master)."
+   f force         bool "Force fetching even when local branch is not descendant."]
+  (let [branch (:branch *opts*)
+        args   (cond-> ["pull"]
+                 (:force *opts*) (conj " --force")
+                 branch          (conj branch))]
+    (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
+
 (boot/deftask git-rebase
   "Reapply commits on top of another branch."
   [s start    START str "Starting point to reapply current branch commits."
