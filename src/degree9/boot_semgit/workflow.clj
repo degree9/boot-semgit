@@ -76,7 +76,7 @@
                   (util/info (str "Closing feature branch: " fname " \n"))
                   (util/info (str "Fetching latest changes from: " remote " \n")))
                 (with-quiet
-                  (semgit/git-fetch :start target :checkout fname))
+                  (semgit/git-fetch :remote remote))
                 (boot/with-pass-thru fs
                   (util/info (str "Cleaning branch history... \n")))
                 (with-quiet
