@@ -19,7 +19,7 @@
    f force      bool  "Allow adding otherwise ignored files."]
   (let [path  (:path *opts*)
         args  (cond-> ["add"]
-                (:force *opts*) (conj " --force")
+                (:force *opts*) (conj "--force")
                 path            (into path))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
@@ -35,8 +35,8 @@
         rename (:rename *opts*)
         start  (:start *opts*)
         args   (cond-> ["branch"]
-                 (:delete *opts*) (conj " --delete")
-                 (:force *opts*)  (conj " --force")
+                 (:delete *opts*) (conj "--delete")
+                 (:force *opts*)  (conj "--force")
                  name             (conj name)
                  rename           (conj rename)
                  start            (conj start))]
@@ -52,8 +52,8 @@
         branch (:branch *opts*)
         start  (:start *opts*)
         args   (cond-> ["checkout"]
-                 (:force *opts*) (conj " --force")
-                 branch          (conj " -b")
+                 (:force *opts*) (conj "--force")
+                 branch          (conj "-b")
                  name            (conj name)
                  start           (conj start))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
@@ -64,8 +64,8 @@
    m message MSG str  "Commit message to use."]
   (let [message (:message *opts*)
         args    (cond-> ["commit"]
-                  (:all *opts*) (conj " --all")
-                  message       (conj " --message " message))]
+                  (:all *opts*) (conj "--all")
+                  message       (conj "--message" message))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
 (boot/deftask git-fetch
@@ -83,7 +83,7 @@
   (let [branch  (:branch *opts*)
         message (:message *opts*)
         args    (cond-> ["merge"]
-                  message (conj " -m " message)
+                  message (conj "-m " message)
                   branch  (into branch))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
@@ -95,7 +95,7 @@
   (let [source   (:source *opts*)
         dest     (:destination *opts*)
         args   (cond-> ["mv"]
-                 (:force *opts*)  (conj " --force")
+                 (:force *opts*)  (conj "--force")
                  source           (conj source)
                  dest             (conj dest))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
@@ -108,8 +108,8 @@
   (let [branch (:branch *opts*)
         rebase (:rebase *opts*)
         args   (cond-> ["pull"]
-                 (:force *opts*) (conj " --force")
-                 rebase          (conj " --rebase")
+                 (:force *opts*) (conj "--force")
+                 rebase          (conj "--rebase")
                  branch          (conj branch))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
@@ -121,7 +121,7 @@
   (let [remote (:remote *opts* "origin")
         branch (:branch *opts*)
         args   (cond-> ["push"]
-                 (:force *opts*) (conj " --force")
+                 (:force *opts*) (conj "--force")
                  remote          (conj remote)
                  branch          (conj branch))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
@@ -137,13 +137,30 @@
                   check (conj check))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
+(boot/deftask git-remote
+  "Manage tracked git repositories."
+  [n name   NAME str  "Name of remote repository."
+   a add         bool "Adds a remote named 'name' for the repository at 'url'."
+   u url    URL  str  "Url of remote repository."
+   r remove REM  bool "Remove the remote named 'name'."]
+  (let [name   (:name *opts*)
+        add    (:add *opts*)
+        url    (:url *opts*)
+        remove (:remove *opts*)
+        args    (cond-> ["remote"]
+                  add    (conj "add")
+                  remove (conj "remove")
+                  name   (conj name)
+                  url    (conj url))]
+    (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
+
 (boot/deftask git-rm
   "Remove files from the working tree and from git index."
   [p path  PATH [str] "Files to remove from index. Fileglobs can be given to add all matching files."
    f force      bool  "Override the up-to-date check."]
   (let [path  (:path *opts*)
         args  (cond-> ["rm"]
-                (:force *opts*) (conj " --force")
+                (:force *opts*) (conj "--force")
                 path            (into path))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
@@ -156,7 +173,7 @@
   (let [name    (:name *opts*)
         message (:message *opts*)
         args    (cond-> ["tag"]
-                  (:delete *opts*) (conj " --delete")
-                  (:force *opts*)  (conj " --force")
+                  (:delete *opts*) (conj "--delete")
+                  (:force *opts*)  (conj "--force")
                   message          (conj message))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
