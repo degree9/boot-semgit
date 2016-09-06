@@ -32,7 +32,7 @@
         (binding [*out* @orig-out
                   *err* @orig-err]
           (next-handler fileset))
-        (next-handler fileset))))
+        (next-handler fileset)))))
 
 (defmacro with-quiet [task]
   `(if semgit/*debug* ~task (comp (silence) ~task (unsilence))))
