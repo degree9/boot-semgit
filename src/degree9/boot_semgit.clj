@@ -142,7 +142,7 @@
   [n name   NAME str  "Name of remote repository."
    a add         bool "Adds a remote named 'name' for the repository at 'url'."
    u url    URL  str  "Url of remote repository."
-   r remove REM  bool "Remove the remote named 'name'."]
+   r remove      bool "Remove the remote named 'name'."]
   (let [name   (:name *opts*)
         add    (:add *opts*)
         url    (:url *opts*)
@@ -168,7 +168,7 @@
   "Merge subtrees together and split repository into subtrees."
   [d prefix PREFIX str "Files to remove from index. Fileglobs can be given to add all matching files."
    r remote REMOTE str "Remote repository of subtree-push."
-   b branch BRANCH str "Remote branch or reference of subtree-push."]]
+   b branch BRANCH str "Remote branch or reference of subtree-push."]
   (let [path  (:path *opts*)
         args  (cond-> ["subtree" "add"]
                 prefix (conj "-P" prefix)
@@ -180,7 +180,7 @@
   "Merge subtrees together and split repository into subtrees."
   [d prefix PREFIX str "Files to remove from index. Fileglobs can be given to add all matching files."
    r remote REMOTE str "Remote repository of subtree-push."
-   b branch BRANCH str "Remote branch or reference of subtree-push."]]
+   b branch BRANCH str "Remote branch or reference of subtree-push."]
   (let [path  (:path *opts*)
         args  (cond-> ["subtree" "pull"]
                 prefix (conj "-P" prefix)
@@ -192,7 +192,7 @@
   "Merge subtrees together and split repository into subtrees."
   [d prefix PREFIX str "Files to remove from index. Fileglobs can be given to add all matching files."
    r remote REMOTE str "Remote repository of subtree-push."
-   b branch BRANCH str "Remote branch or reference of subtree-push."]]
+   b branch BRANCH str "Remote branch or reference of subtree-push."]
   (let [path  (:path *opts*)
         args  (cond-> ["subtree" "push"]
                 prefix (conj "-P" prefix)
