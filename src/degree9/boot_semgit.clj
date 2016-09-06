@@ -56,7 +56,6 @@
                  branch          (conj " -b")
                  name            (conj name)
                  start           (conj start))]
-                 (prn args)
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
 (boot/deftask git-commit
