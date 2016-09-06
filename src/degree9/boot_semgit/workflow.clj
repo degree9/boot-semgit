@@ -28,9 +28,11 @@
   []
   (fn [next-handler]
     (fn [fileset]
-      (binding [*out* @orig-out
-                *err* @orig-err]
-        (next-handler fileset)))))
+      (if (and @orig-out @orig-err)
+        (binding [*out* @orig-out
+                  *err* @orig-err]
+          (next-handler fileset))
+        (next-handler fileset))))
 
 (defmacro with-quiet [task]
   `(if semgit/*debug* ~task (comp (silence) ~task (unsilence))))
@@ -41,13 +43,14 @@
   [n name       NAME   str  "Feature name which will be appended to 'feature-'."
    c close             bool "Closes a feature branch using 'git-rebase' and 'git-merge'."
    b branch     BRANCH str  "The base or target branch for this feature."
+   r remote     REMOTE str  "Remote repository to use as a base for this feature."
    d delete            bool "Delete/Remove a feature without closing it."]
   (assert (:name *opts*) "Feature 'name' was not provided.")
   (assert (if (:close *opts*) (:branch *opts*) true) "Target 'branch' was not provided.")
-  (let [mode     (:mode *opts* :rebase)
-        bname    (:name *opts*)
+  (let [bname    (:name *opts*)
         fname    (str "feature-" bname)
         target   (:branch *opts* "master")
+        remote   (:remote *opts* "origin")
         close?   (:close *opts*)
         remove?  (:delete *opts*)
         open?    (not (or close? remove?))
@@ -71,6 +74,10 @@
       close?  (comp
                 (boot/with-pass-thru fs
                   (util/info (str "Closing feature branch: " fname " \n"))
+                  (util/info (str "Fetching latest changes from: " remote " \n")))
+                (with-quiet
+                  (semgit/git-fetch :start target :checkout fname))
+                (boot/with-pass-thru fs
                   (util/info (str "Cleaning branch history... \n")))
                 (with-quiet
                   (semgit/git-rebase :start target :checkout fname))
@@ -101,13 +108,20 @@
                   (semgit/git-branch :name fname :delete true :force true))))))
 
 (boot/deftask patch
-  "Manage project patch/hotfix branches."
-  [n name       NAME   str  "Feature name which will be appended to 'patch-'."
-   c close             bool "Closes a patch branch using 'mode'."
-   b branch     BRANCH str  "The base branch and future target for this patch."
-   m mode       MODE   kw   "The mode which 'close' should opperate, default is ':rebase'."
-   r remove            bool "Removes a patch without closing it."]
-  (let [mode (:mode *opts* :rebase)]
+  "Manage project patch branches."
+  [n name       NAME   str  "Patch issue id (github issue, etc.) which will be appended to 'patch-'."
+   c close             bool "Closes a patch branch using 'git-rebase' and 'git-merge'."
+   b branch     BRANCH str  "The base or target branch for this patch."
+   d delete            bool "Delete/Remove a patch without closing it."]
+  (let [bname    (:name *opts*)
+        fname    (str "patch-" bname)
+        target   (:branch *opts* "master")
+        close?   (:close *opts*)
+        remove?  (:delete *opts*)
+        open?    (not (or close? remove?))
+        closemsg (str "[close patch] " bname)
+        openmsg  (str "[open patch] " bname " from " target)
+        mergemsg (str "[merge patch] " bname " into " target)]
     (boot/with-pass-thru fs
       ;;branch
       ;;version
