@@ -91,8 +91,14 @@
                 (with-quiet
                   (semgit/git-merge :branch [fname] :message mergemsg)))
       remove? (comp
-                (semgit/git-checkout :name target :force true)
-                (semgit/git-branch :name fname :delete true :force true)))))
+                (boot/with-pass-thru fs
+                  (util/info (str "Switching to target: " target "  \n")))
+                (with-quiet
+                  (semgit/git-checkout :name target :force true))
+                (boot/with-pass-thru fs
+                  (util/info (str "Removing feature: " fname "  \n")))
+                (with-quiet
+                  (semgit/git-branch :name fname :delete true :force true))))))
 
 (boot/deftask patch
   "Manage project patch/hotfix branches."
