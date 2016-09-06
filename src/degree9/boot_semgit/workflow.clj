@@ -33,7 +33,7 @@
         (next-handler fileset)))))
 
 (defmacro with-quiet [task]
-  `(comp (silence) ~task (unsilence)))
+  `(if semgit/*debug* ~task (comp (silence) ~task (unsilence))))
 
 ;; Semgit Workflow Tasks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (boot/deftask feature
