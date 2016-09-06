@@ -56,7 +56,7 @@
         mergemsg (str "[merge feature] " bname " into " target)]
     (cond
       open?   (comp
-                (util/info (str "Creating feature branch... \n"))
+                (util/info (str "Creating feature branch: " fname " \n"))
                 (with-quiet
                   (semgit/git-checkout :branch true :name fname :start target))
                 (util/info (str "Updating version... \n"))
@@ -64,8 +64,7 @@
                   (semver/version :pre-release 'degree9.boot-semgit/get-feature))
                 (util/info (str "Saving changes... \n"))
                 (with-quiet
-                  (semgit/git-commit :all true :message openmsg))
-                (util/info (str "Feature branch created. \n")))
+                  (semgit/git-commit :all true :message openmsg)))
       close?  (comp
                 (semgit/git-rebase :start target :checkout fname)
                 (semgit/git-checkout :name target :start "version.properties")
