@@ -103,10 +103,26 @@
 (boot/deftask git-pull
   "Fetch from and integrate with another repository or a local branch."
   [b branch BRANCH str  "Branch to pull changes from (can be a remote branch ie. origin/master)."
+   r rebase        bool "Uses git-rebase instead of git-merge."
    f force         bool "Force fetching even when local branch is not descendant."]
   (let [branch (:branch *opts*)
+        rebase (:rebase *opts*)
         args   (cond-> ["pull"]
                  (:force *opts*) (conj " --force")
+                 rebase          (conj " --rebase")
+                 branch          (conj branch))]
+    (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
+
+(boot/deftask git-push
+  "Update remote refs along with associated objects."
+  [r remote REMOTE str   "Remote repository of a push (defaults to 'origin')."
+   b branch BRANCH str   "Remote branch to be pushed to."
+   f force         bool  "Force fetching even when local branch is not descendant."]
+  (let [remote (:remote *opts* "origin")
+        branch (:branch *opts*)
+        args   (cond-> ["push"]
+                 (:force *opts*) (conj " --force")
+                 remote          (conj remote)
                  branch          (conj branch))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
