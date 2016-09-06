@@ -2,6 +2,7 @@
   (:require [clojure.string :as s]
             [clojure.java.io :as io]
             [boot.core :as boot]
+            [boot.util :as util]
             [degree9.boot-semver :as semver]
             [degree9.boot-semgit :as semgit]))
 
