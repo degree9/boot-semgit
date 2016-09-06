@@ -68,6 +68,14 @@
                   message       (conj " --message " message))]
     (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
 
+(boot/deftask git-fetch
+  "Download objects and refs from another repository."
+  [r remote REMOTE str "Remote repository to fetch."]
+  (let [remote (:remote *opts*)
+        args    (cond-> ["fetch"]
+                  remote       (conj remote))]
+    (exec/exec :process "git" :arguments args :directory "." :debug *debug*)))
+
 (boot/deftask git-merge
   "Join two or more git branches together."
   [b branch  BRANCH  [str] "Branch(es) to merge into current branch."
