@@ -103,4 +103,4 @@ d delete            bool "Delete/Remove a feature without closing it."
 ```
 
 [1]: https://github.com/boot-clj/boot
-[2]: https://github.com/degree9/boot-semgit/wiki/Porcelain%20Tasks
+[2]: https://github.com/degree9/boot-semgit/wiki/Porcelain-Tasks
