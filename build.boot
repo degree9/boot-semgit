@@ -4,7 +4,7 @@
                   [adzerk/bootlaces        "0.1.13" :scope "test"]
                   [clj-time                "0.11.0"]
                   [seancorfield/boot-new   "0.4.6"]
-                  [degree9/boot-exec       "0.4.0-SNAPSHOT"]
+                  [degree9/boot-exec       "0.4.0"]
                   [degree9/boot-semver     "1.3.6"]]
  :resource-paths   #{"src"})
 
