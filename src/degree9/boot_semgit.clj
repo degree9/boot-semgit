@@ -6,7 +6,7 @@
             [degree9.boot-exec :as exec]
             [degree9.boot-semver :as semver]))
 ;; Semgit Global Settings ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(def ^:dynamic *debug* true)
+(def ^:dynamic *debug* false)
 
 ;; Semgit Helper Fn's ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn get-feature [& _]
