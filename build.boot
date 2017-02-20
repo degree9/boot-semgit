@@ -1,14 +1,15 @@
 (set-env!
- :dependencies  '[[org.clojure/clojure     "1.7.0"]
-                  [boot/core               "2.6.0"]
+ :dependencies  '[[org.clojure/clojure     "1.8.0"]
+                  [boot/core               "2.7.1"]
                   [adzerk/bootlaces        "0.1.13" :scope "test"]
-                  [clj-time                "0.11.0"]
-                  [seancorfield/boot-new   "0.4.6"]
+                  [clj-time                "0.13.0"]
+                  [boot/new                "0.5.1"]
                   [degree9/boot-exec       "0.4.0"]
-                  [degree9/boot-semver     "1.3.6"]]
+                  [degree9/boot-semver     "1.4.1"]]
  :resource-paths   #{"src"})
 
 (require
+ '[boot.util :as util]
  '[adzerk.bootlaces :refer :all]
  '[degree9.boot-semver :refer :all]
  '[degree9.boot-semgit :refer :all]
@@ -27,7 +28,7 @@
   []
   (comp
    (watch)
-   (version :no-update true
+   (version :develop true
             :minor 'inc
             :patch 'zero
             :pre-release 'snapshot
@@ -43,3 +44,13 @@
    (target)
    (build-jar)
    (push-release)))
+
+(deftask testing
+  "Test mute/unmute of task output."
+  []
+  (comp
+    (with-quiet
+      (with-pass-thru fs
+        (util/info "Can't see me!")))
+    (with-pass-thru fs
+      (util/info "You can see me!"))))

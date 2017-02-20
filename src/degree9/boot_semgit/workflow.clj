@@ -7,35 +7,35 @@
             [degree9.boot-semgit :as semgit]))
 
 ;; Semgit Workflow Helper Fn's ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(def orig-err (atom nil))
-(def orig-out (atom nil))
+(def ^:dynamic *orig-err* nil)
+(def ^:dynamic *orig-out* nil)
 
-(boot/deftask silence
-  "Silence future task output."
+(boot/deftask mute
+  "Hide future task output."
   []
   (fn [next-handler]
     (fn [fileset]
-      (let [out *out*
-            err *err*]
-        (reset! orig-out out)
-        (reset! orig-err err)
-        (binding [*out* (new java.io.StringWriter)
-                  *err* (new java.io.StringWriter)]
-          (next-handler fileset))))))
+      (binding [*orig-out* *out*
+                *orig-err* *err*
+                *out* (new java.io.StringWriter)
+                *err* (new java.io.StringWriter)]
+        (next-handler fileset)))))
 
-(boot/deftask unsilence
-  "Unsilence future task output."
+(boot/deftask unmute
+  "Show future task output."
   []
   (fn [next-handler]
     (fn [fileset]
-      (if (and @orig-out @orig-err)
-        (binding [*out* @orig-out
-                  *err* @orig-err]
+      (if (and *orig-out* *orig-err*)
+        (binding [*out* *orig-out*
+                  *err* *orig-err*
+                  *orig-out* nil
+                  *orig-err* nil]
           (next-handler fileset))
         (next-handler fileset)))))
 
-(defmacro with-quiet [task]
-  `(if semgit/*debug* ~task (comp (silence) ~task (unsilence))))
+(defmacro with-quiet [& tasks]
+  `(if semgit/*debug* (comp ~@tasks) (comp (mute) ~@tasks (unmute))))
 
 ;; Semgit Workflow Tasks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (boot/deftask feature
