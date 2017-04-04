@@ -1,5 +1,9 @@
 # boot-semgit
 [![Clojars Project](https://img.shields.io/clojars/v/degree9/boot-semgit.svg)](https://clojars.org/degree9/boot-semgit)
+[![Dependencies Status](https://jarkeeper.com/degree9/boot-semgit/status.svg)](https://jarkeeper.com/degree9/boot-semgit)
+[![Downloads](https://jarkeeper.com/degree9/boot-semgit/downloads.svg)](https://jarkeeper.com/degree9/boot-semgit)
+<!--- [![CircleCI](https://circleci.com/gh/degree9/boot-semgit.svg?style=svg)](https://circleci.com/gh/degree9/boot-semgit)
+[![gitcheese.com](https://api.gitcheese.com/v1/projects/83cde58b-907d-4cd9-ba61-405b78f7b8f4/badges?type=1&size=xs)](https://www.gitcheese.com/app/#/projects/83cde58b-907d-4cd9-ba61-405b78f7b8f4/pledges/create) --->
 
 Semantic Git access from [boot-clj][1].
 
