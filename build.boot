@@ -2,8 +2,8 @@
  :dependencies  '[[org.clojure/clojure     "1.8.0"]
                   [boot/core               "2.7.1"]
                   [adzerk/bootlaces        "0.1.13" :scope "test"]
-                  [degree9/boot-exec       "0.5.0"]
-                  [degree9/boot-semver     "1.4.3"]]
+                  [degree9/boot-exec       "1.0.0"]
+                  [degree9/boot-semver     "1.4.4"]]
  :resource-paths   #{"src"})
 
 (require
