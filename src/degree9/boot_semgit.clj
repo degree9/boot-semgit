@@ -1,5 +1,6 @@
 (ns degree9.boot-semgit
   (:require [clojure.string :as s]
+            [clojure.java.io :as io]
             [boot.core :as boot]
             [boot.util :as util]
             [boot.git :as git]
