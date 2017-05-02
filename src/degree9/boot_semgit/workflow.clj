@@ -1,12 +1,10 @@
 (ns degree9.boot-semgit.workflow
-  (:require [clojure.string :as s]
-            [clojure.java.io :as io]
-            [boot.core :as boot]
+  (:require [boot.core :as boot]
             [boot.util :as util]
             [degree9.boot-semver :as semver]
             [degree9.boot-semgit :as semgit]))
 
-;; Semgit Workflow Helper Fn's ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Semgit Workflow Helper Tasks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (def ^:dynamic *orig-err* nil)
 (def ^:dynamic *orig-out* nil)
 
@@ -37,6 +35,8 @@
 (defmacro with-quiet [& tasks]
   `(if semgit/*debug* (comp ~@tasks) (comp (mute) ~@tasks (unmute))))
 
+;; Semgit Workflow Helper Fn's ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; Semgit Workflow Tasks ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (boot/deftask feature
   "Manage project feature branches."
@@ -59,51 +59,51 @@
         mergemsg (str "[merge feature] " bname " into " target)]
     (cond
       open?   (comp
-                (boot/with-pass-thru fs
-                  (util/info (str "Creating feature branch: " fname " \n")))
+                (boot/with-pass-thru _
+                  (util/info (str "Creating branch: " fname " \n")))
                 (with-quiet
                   (semgit/git-checkout :branch true :name fname :start target))
-                (boot/with-pass-thru fs
+                (boot/with-pass-thru _
                   (util/info (str "Updating version... \n")))
                 (with-quiet
                   (semver/version :pre-release 'degree9.boot-semgit/get-feature))
-                (boot/with-pass-thru fs
+                (boot/with-pass-thru _
                   (util/info (str "Saving changes... \n")))
                 (with-quiet
                   (semgit/git-commit :all true :message openmsg)))
       close?  (comp
-                (boot/with-pass-thru fs
-                  (util/info (str "Closing feature branch: " fname " \n"))
+                (boot/with-pass-thru _
+                  (util/info (str "Closing branch: " fname " \n"))
                   (util/info (str "Fetching latest changes from: " remote " \n")))
                 (with-quiet
                   (semgit/git-fetch :remote remote))
-                (boot/with-pass-thru fs
+                (boot/with-pass-thru _
                   (util/info (str "Cleaning branch history... \n")))
                 (with-quiet
                   (semgit/git-rebase :start target :checkout fname))
-                (boot/with-pass-thru fs
+                (boot/with-pass-thru _
                   (util/info (str "Syncing version... \n")))
                 (with-quiet
                   (semgit/git-checkout :name target :start "version.properties"))
-                (boot/with-pass-thru fs
+                (boot/with-pass-thru _
                   (util/info (str "Saving changes... \n")))
                 (with-quiet
                   (semgit/git-commit :all true :message closemsg))
-                (boot/with-pass-thru fs
+                (boot/with-pass-thru _
                   (util/info (str "Switching to target: " target " \n")))
                 (with-quiet
                   (semgit/git-checkout :name target))
-                (boot/with-pass-thru fs
+                (boot/with-pass-thru _
                   (util/info (str "Merging feature: " fname "  \n")))
                 (with-quiet
                   (semgit/git-merge :branch [fname] :message mergemsg)))
       remove? (comp
-                (boot/with-pass-thru fs
+                (boot/with-pass-thru _
                   (util/info (str "Switching to target: " target "  \n")))
                 (with-quiet
                   (semgit/git-checkout :name target :force true))
-                (boot/with-pass-thru fs
-                  (util/info (str "Removing feature: " fname "  \n")))
+                (boot/with-pass-thru _
+                  (util/info (str "Removing branch: " fname "  \n")))
                 (with-quiet
                   (semgit/git-branch :name fname :delete true :force true))))))
 
@@ -122,7 +122,7 @@
         closemsg (str "[close patch] " bname)
         openmsg  (str "[open patch] " bname " from " target)
         mergemsg (str "[merge patch] " bname " into " target)]
-    (boot/with-pass-thru fs
+    (boot/with-pass-thru _
       ;;branch
       ;;version
       ;;commit

@@ -2,10 +2,8 @@
  :dependencies  '[[org.clojure/clojure     "1.8.0"]
                   [boot/core               "2.7.1"]
                   [adzerk/bootlaces        "0.1.13" :scope "test"]
-                  [clj-time                "0.13.0"]
-                  [boot/new                "0.5.1"]
-                  [degree9/boot-exec       "0.4.0"]
-                  [degree9/boot-semver     "1.4.1"]]
+                  [degree9/boot-exec       "0.5.0"]
+                  [degree9/boot-semver     "1.4.3"]]
  :resource-paths   #{"src"})
 
 (require
@@ -44,13 +42,3 @@
    (target)
    (build-jar)
    (push-release)))
-
-(deftask testing
-  "Test mute/unmute of task output."
-  []
-  (comp
-    (with-quiet
-      (with-pass-thru fs
-        (util/info "Can't see me!")))
-    (with-pass-thru fs
-      (util/info "You can see me!"))))
