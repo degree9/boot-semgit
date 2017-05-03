@@ -15,7 +15,6 @@
 
 (task-options!
  pom {:project 'degree9/boot-semgit
-      :version (get-version)
       :description "Semantic Git usage for boot projects."
       :url         "https://github.com/degree9/boot-semgit"
       :scm {:url "https://github.com/degree9/boot-semgit"}}
@@ -29,8 +28,7 @@
    (version :develop true
             :minor 'inc
             :patch 'zero
-            :pre-release 'snapshot
-            :generate 'degree9.boot-semgit.version)
+            :pre-release 'snapshot)
    (target)
    (build-jar)))
 
