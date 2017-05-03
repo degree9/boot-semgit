@@ -131,3 +131,13 @@
       )))
 
 (def hotfix patch)
+
+(boot/deftask sync-repo
+  "Sync project git repository. (origin/master)"
+  []
+  (let [branch "origin/master"]
+    (comp
+      (boot/with-pass-thru _
+        (util/info "Syncing git repository with %s...\n" branch))
+      (with-quiet
+        (semgit/git-pull :branch branch)))))
