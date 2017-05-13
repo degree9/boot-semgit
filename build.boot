@@ -1,14 +1,12 @@
 (set-env!
  :dependencies  '[[org.clojure/clojure     "1.8.0"]
-                  [boot/core               "2.7.1"]
-                  [adzerk/bootlaces        "0.1.13" :scope "test"]
+                  [boot/core               "2.7.2"]
                   [degree9/boot-exec       "1.0.0"]
                   [degree9/boot-semver     "1.4.4"]]
  :resource-paths   #{"src"})
 
 (require
  '[boot.util :as util]
- '[adzerk.bootlaces :refer :all]
  '[degree9.boot-semver :refer :all]
  '[degree9.boot-semgit :refer :all]
  '[degree9.boot-semgit.workflow :refer :all])
