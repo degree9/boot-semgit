@@ -22,7 +22,7 @@
         args  (cond-> ["add"]
                 (:force *opts*) (conj "--force")
                 path            (into path))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-branch
   "List, create, or delete branches."
@@ -41,7 +41,7 @@
                  name             (conj name)
                  rename           (conj rename)
                  start            (conj start))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-checkout
   "Switch git branches."
@@ -57,7 +57,7 @@
                  branch          (conj "-b")
                  name            (conj name)
                  start           (conj start))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-commit
   "Record changes to the repository."
@@ -67,7 +67,7 @@
         args    (cond-> ["commit"]
                   (:all *opts*) (conj "--all")
                   message       (conj "--message" message))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-fetch
   "Download objects and refs from another repository."
@@ -75,7 +75,7 @@
   (let [remote (:remote *opts*)
         args   (cond-> ["fetch"]
                  remote (conj remote))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-merge
   "Join two or more git branches together."
@@ -86,7 +86,7 @@
         args    (cond-> ["merge"]
                   message (conj "-m " message)
                   branch  (into branch))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-mv
   "Move or rename a git file or directory."
@@ -99,7 +99,7 @@
                  (:force *opts*)  (conj "--force")
                  source           (conj source)
                  dest             (conj dest))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-pull
   "Fetch from and integrate with another repository or a local branch."
@@ -112,7 +112,7 @@
                  (:force *opts*) (conj "--force")
                  rebase          (conj "--rebase")
                  branch          (conj branch))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-push
   "Update remote refs along with associated objects."
@@ -125,7 +125,7 @@
                  (:force *opts*) (conj "--force")
                  remote          (conj remote)
                  branch          (conj branch))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-rebase
   "Reapply commits on top of another branch."
@@ -136,7 +136,7 @@
         args    (cond-> ["rebase"]
                   start (conj start)
                   check (conj check))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-remote
   "Manage tracked git repositories."
@@ -153,7 +153,7 @@
                   remove (conj "remove")
                   name   (conj name)
                   url    (conj url))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-rm
   "Remove files from the working tree and from git index."
@@ -163,7 +163,7 @@
         args  (cond-> ["rm"]
                 (:force *opts*) (conj "--force")
                 path            (into path))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-subtree-add
   "Merge subtrees together and split repository into subtrees."
@@ -175,7 +175,7 @@
                 prefix (conj "-P" prefix)
                 remote (conj remote)
                 branch (conj branch))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-subtree-pull
   "Merge subtrees together and split repository into subtrees."
@@ -187,7 +187,7 @@
                 prefix (conj "-P" prefix)
                 remote (conj remote)
                 branch (conj branch))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-subtree-push
   "Merge subtrees together and split repository into subtrees."
@@ -199,7 +199,7 @@
                 prefix (conj "-P" prefix)
                 remote (conj remote)
                 branch (conj branch))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
 
 (boot/deftask git-tag
   "Create, list, delete or verify a tag."
@@ -213,4 +213,4 @@
                   (:delete *opts*) (conj "--delete")
                   (:force *opts*)  (conj "--force")
                   message          (conj message))]
-    (exec/exec :process "git" :arguments args :directory "." :show *debug*)))
+    (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
