@@ -7,6 +7,18 @@
 
 Semantic Git access from [boot-clj][1].
 
+---
+
+<p align="center">
+  <a href="https://degree9.io" align="center">
+    <img width="135" src="http://degree9.io/images/degree9.png">
+  </a>
+  <br>
+  <b>boot-semgit is developed and maintained by Degree9</b>
+</p>
+
+---
+
 * Provides Git Porcelain tasks (wrappers around git binary)  
   `git-add, git-branch, git-commit, etc.`  
   See [which tasks are provided][2].
