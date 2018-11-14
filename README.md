@@ -117,6 +117,18 @@ r remote     REMOTE str  "Remote repository to use as a base for this feature."
 d delete            bool "Delete/Remove a feature without closing it."
 ```
 
+---
+
+<p align="center">
+  <a href="https://www.patreon.com/degree9" align="center">
+    <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160" alt="Patreon">
+  </a>
+  <br>
+  <b>Support this and other open-source projects on Patreon!</b>
+</p>
+
+---
+
 [1]: https://github.com/degree9/boot-semgit/wiki/Porcelain-Tasks
 [clojars-badge]: https://img.shields.io/clojars/v/degree9/boot-semgit.svg
 [clojars]: https://clojars.org/degree9/boot-semgit
