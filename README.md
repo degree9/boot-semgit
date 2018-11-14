@@ -1,8 +1,8 @@
 # boot-semgit
-[![Clojars Project](https://img.shields.io/clojars/v/degree9/boot-semgit.svg)](https://clojars.org/degree9/boot-semgit)
-[![Dependencies Status](https://versions.deps.co/degree9/boot-semgit/status.svg)](https://versions.deps.co/degree9/boot-semgit)
-[![Downloads](https://versions.deps.co/degree9/boot-semgit/downloads.svg)](https://versions.deps.co/degree9/boot-semgit)
-[![Slack][slack]][d9-slack]
+[![Clojars Project][clojars-badge]][clojars]
+[![Dependencies Status][deps-badge]][deps]
+[![Downloads][downloads-badge]][downloads]
+[![Slack][slack-badge]][slack]
 
 Semantic Git access from [boot-clj][1].
 
@@ -20,7 +20,7 @@ Semantic Git access from [boot-clj][1].
 
 * Provides Git Porcelain tasks (wrappers around git binary)  
   `git-add, git-branch, git-commit, etc.`  
-  See [which tasks are provided][2].
+  See [which tasks are provided][1].
 
 > The following outlines basic usage of the task, extensive testing has not been done.
 > Please submit issues and pull requests!
@@ -117,7 +117,12 @@ r remote     REMOTE str  "Remote repository to use as a base for this feature."
 d delete            bool "Delete/Remove a feature without closing it."
 ```
 
-[1]: https://github.com/boot-clj/boot
-[2]: https://github.com/degree9/boot-semgit/wiki/Porcelain-Tasks
-[slack]: https://img.shields.io/badge/clojurians-degree9-%23e01563.svg?logo=slack
-[d9-slack]: https://clojurians.slack.com/channels/degree9/
+[1]: https://github.com/degree9/boot-semgit/wiki/Porcelain-Tasks
+[clojars-badge]: https://img.shields.io/clojars/v/degree9/boot-semgit.svg
+[clojars]: https://clojars.org/degree9/boot-semgit
+[deps-badge]: https://versions.deps.co/degree9/boot-semgit/status.svg
+[deps]: https://versions.deps.co/degree9/boot-semgit
+[downloads-badge]: https://versions.deps.co/degree9/boot-semgit/downloads.svg
+[downloads]: https://versions.deps.co/degree9/boot-semgit
+[slack-badge]: https://img.shields.io/badge/clojurians-degree9-%23e01563.svg?logo=slack&longCache=true
+[slack]: https://clojurians.slack.com/channels/degree9/
