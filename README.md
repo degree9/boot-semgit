@@ -4,6 +4,7 @@
 [![Downloads](https://versions.deps.co/degree9/boot-semgit/downloads.svg)](https://versions.deps.co/degree9/boot-semgit)
 <!--- [![CircleCI](https://circleci.com/gh/degree9/boot-semgit.svg?style=svg)](https://circleci.com/gh/degree9/boot-semgit)
 [![gitcheese.com](https://api.gitcheese.com/v1/projects/83cde58b-907d-4cd9-ba61-405b78f7b8f4/badges?type=1&size=xs)](https://www.gitcheese.com/app/#/projects/83cde58b-907d-4cd9-ba61-405b78f7b8f4/pledges/create) --->
+[![Slack][slack]][d9-slack]
 
 Semantic Git access from [boot-clj][1].
 
@@ -120,3 +121,5 @@ d delete            bool "Delete/Remove a feature without closing it."
 
 [1]: https://github.com/boot-clj/boot
 [2]: https://github.com/degree9/boot-semgit/wiki/Porcelain-Tasks
+[slack]: https://img.shields.io/badge/clojurians-degree9-%23e01563.svg?logo=slack
+[d9-slack]: https://clojurians.slack.com/channels/degree9/
