@@ -122,13 +122,13 @@
         closemsg (str "[close patch] " bname)
         openmsg  (str "[open patch] " bname " from " target)
         mergemsg (str "[merge patch] " bname " into " target)]
-    (boot/with-pass-thru _
+    (boot/with-pass-thru _)))
       ;;branch
       ;;version
       ;;commit
       ;;close
       ;;remove
-      )))
+
 
 (def hotfix patch)
 
@@ -138,6 +138,6 @@
   (let [branch "origin/master"]
     (comp
       (boot/with-pass-thru _
-        (util/info "Syncing git repository with %s...\n" branch))
+        (util/info "Syncing git repository with: %s\n" branch))
       (with-quiet
         (semgit/git-pull :branch branch)))))
