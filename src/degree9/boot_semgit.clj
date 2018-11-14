@@ -212,5 +212,6 @@
         args    (cond-> ["tag"]
                   (:delete *opts*) (conj "--delete")
                   (:force *opts*)  (conj "--force")
-                  message          (conj message))]
+                  message          (conj "-m" message)
+                  name             (conj name))]
     (exec/exec :process "git" :arguments args :directory "." :output *debug*)))
