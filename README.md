@@ -11,7 +11,7 @@ Semantic Git access from [boot-clj][1].
 
 <p align="center">
   <a href="https://degree9.io" align="center">
-    <img width="135" src="http://degree9.io/images/degree9.png">
+    <img width="135" src="/.github/logo.png">
   </a>
   <br>
   <b>boot-semgit is developed and maintained by Degree9</b>
@@ -117,6 +117,18 @@ b branch     BRANCH str  "The base or target branch for this feature."
 r remote     REMOTE str  "Remote repository to use as a base for this feature."
 d delete            bool "Delete/Remove a feature without closing it."
 ```
+
+---
+
+<p align="center">
+  <a href="https://www.patreon.com/degree9" align="center">
+    <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160" alt="Patreon">
+  </a>
+  <br>
+  <b>Support this and other open-source projects on Patreon!</b>
+</p>
+
+---
 
 [1]: https://github.com/degree9/boot-semgit/wiki/Porcelain-Tasks
 [clojars-badge]: https://img.shields.io/clojars/v/degree9/boot-semgit.svg
