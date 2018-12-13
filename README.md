@@ -1,4 +1,5 @@
-# boot-semgit
+<p align="center"><img src="/.github/d9boot-semgit.png" width="445px"></p>
+
 [![Clojars Project][clojars-badge]][clojars]
 [![Dependencies Status][deps-badge]][deps]
 [![Downloads][downloads-badge]][downloads]
