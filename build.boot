@@ -1,8 +1,8 @@
 (set-env!
- :dependencies  '[[org.clojure/clojure     "1.8.0"]
-                  [boot/core               "2.7.2"]
-                  [degree9/boot-exec       "1.1.0-SNAPSHOT"]
-                  [degree9/boot-semver     "1.8.0-SNAPSHOT"]]
+ :dependencies  '[[org.clojure/clojure     "1.10.0"]
+                  [boot/core               "2.8.2"]
+                  [degree9/boot-exec       "1.1.0"]
+                  [degree9/boot-semver     "1.8.0"]]
  :resource-paths   #{"src"})
 
 (require
